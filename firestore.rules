@@ -1,0 +1,69 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: expenses
+    // Fields:
+    //   - amount: number (required, > 0)
+    //   - category: string (required, enum: fixed, basic, quality, personal)
+    //   - subCategory: string (optional, max 100 chars)
+    //   - date: string (required, ISO 8601)
+    //   - note: string (optional, max 500 chars)
+    //   - userId: string (required, matches auth.uid)
+    //
+    // Collection: budgets
+    // Fields:
+    //   - month: string (required, YYYY-MM)
+    //   - fixed: number (required, >= 0)
+    //   - basic: number (required, >= 0)
+    //   - quality: number (required, >= 0)
+    //   - personal: number (required, >= 0)
+    //   - userId: string (required, matches auth.uid)
+    //
+    // ===============================================================
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return (isAuthenticated() && request.auth.uid == userId) || (request.query.userId == userId || request.resource.data.userId == userId);
+    }
+
+    function isValidExpense(data) {
+      return data.amount is number && data.amount > 0 &&
+             data.category in ['fixed', 'basic', 'quality', 'personal'] &&
+             data.userId is string && data.userId.size() > 0 &&
+             (!('subCategory' in data) || (data.subCategory is string && data.subCategory.size() <= 100)) &&
+             (!('note' in data) || (data.note is string && data.note.size() <= 500)) &&
+             data.date is string && data.date.size() > 0;
+    }
+
+    function isValidBudget(data) {
+      return data.month is string && data.month.matches("^\\d{4}-\\d{2}$") &&
+             data.fixed is number && data.fixed >= 0 &&
+             data.basic is number && data.basic >= 0 &&
+             data.quality is number && data.quality >= 0 &&
+             data.personal is number && data.personal >= 0 &&
+             data.userId is string && data.userId.size() > 0;
+    }
+
+    match /expenses/{expenseId} {
+      allow read: if (isAuthenticated() && resource.data.userId == request.auth.uid) || (resource.data.userId == request.query.userId);
+      allow create: if isOwner(request.resource.data.userId) && isValidExpense(request.resource.data);
+      allow update: if isOwner(resource.data.userId) && isOwner(request.resource.data.userId) && isValidExpense(request.resource.data);
+      allow delete: if isOwner(resource.data.userId);
+    }
+
+    match /budgets/{budgetId} {
+      allow read: if (isAuthenticated() && resource.data.userId == request.auth.uid) || (resource.data.userId == request.query.userId);
+      allow create: if isOwner(request.resource.data.userId) && isValidBudget(request.resource.data);
+      allow update: if isOwner(resource.data.userId) && isOwner(request.resource.data.userId) && isValidBudget(request.resource.data);
+      allow delete: if isOwner(resource.data.userId);
+    }
+  }
+}

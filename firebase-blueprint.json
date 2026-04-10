@@ -1,0 +1,42 @@
+{
+  "entities": {
+    "Expense": {
+      "title": "Expense",
+      "description": "A single expense record",
+      "type": "object",
+      "properties": {
+        "amount": { "type": "number", "description": "The amount spent" },
+        "category": { "type": "string", "enum": ["fixed", "basic", "quality", "personal"], "description": "The category of the expense" },
+        "subCategory": { "type": "string", "description": "Specific sub-category (e.g., Rent, Food)" },
+        "date": { "type": "string", "format": "date-time", "description": "When the expense occurred" },
+        "note": { "type": "string", "description": "Optional note" },
+        "userId": { "type": "string", "description": "The owner of the record" }
+      },
+      "required": ["amount", "category", "date", "userId"]
+    },
+    "Budget": {
+      "title": "Budget",
+      "description": "Monthly budget settings",
+      "type": "object",
+      "properties": {
+        "month": { "type": "string", "description": "Month in YYYY-MM format" },
+        "fixed": { "type": "number", "description": "Budget for fixed expenses" },
+        "basic": { "type": "number", "description": "Budget for basic expenses" },
+        "quality": { "type": "number", "description": "Budget for quality expenses" },
+        "personal": { "type": "number", "description": "Budget for personal expenses" },
+        "userId": { "type": "string", "description": "The owner of the budget" }
+      },
+      "required": ["month", "userId"]
+    }
+  },
+  "firestore": {
+    "/expenses/{expenseId}": {
+      "schema": "Expense",
+      "description": "User expenses"
+    },
+    "/budgets/{budgetId}": {
+      "schema": "Budget",
+      "description": "User monthly budgets"
+    }
+  }
+}

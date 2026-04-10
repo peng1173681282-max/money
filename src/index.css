@@ -1,0 +1,165 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600;700;800&family=Noto+Serif+SC:wght@700;900&display=swap');
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+    --font-heading: "Playfair Display", "Noto Serif SC", serif;
+    --font-sans: "Inter", "PingFang SC", sans-serif;
+    --font-serif: "Playfair Display", "Noto Serif SC", serif;
+    
+    /* Magpie Murders Palette */
+    --color-magpie-crimson: #a12c2c;
+    --color-magpie-ink: #1a1a1a;
+    --color-magpie-paper: #f4f1ea;
+    --color-magpie-parchment: #d4c5a9;
+    --color-magpie-gold: #b89b5e;
+    
+    --color-background: #f4f1ea;
+    --color-foreground: #1a1a1a;
+    --color-card: #ffffff;
+    --color-card-foreground: #1a1a1a;
+    --color-popover: #ffffff;
+    --color-popover-foreground: #1a1a1a;
+    --color-primary: #a12c2c;
+    --color-primary-foreground: #f4f1ea;
+    --color-secondary: #d4c5a9;
+    --color-secondary-foreground: #1a1a1a;
+    --color-muted: #e8e4d9;
+    --color-muted-foreground: #5c5852;
+    --color-accent: #a12c2c;
+    --color-accent-foreground: #f4f1ea;
+    --color-destructive: #7a1d1d;
+    --color-border: #1a1a1a;
+    --color-input: #1a1a1a;
+    --color-ring: #a12c2c;
+    
+    --radius-3xl: 0px; /* Sharp corners for editorial look */
+    --radius-4xl: 0px;
+    
+    --animate-float: float 6s ease-in-out infinite;
+    --animate-sway: sway 8s ease-in-out infinite;
+    --animate-spin-slow: spin 12s linear infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes sway {
+  0%, 100% { transform: rotate(-2deg); }
+  50% { transform: rotate(2deg); }
+}
+
+:root {
+    --background: #f4f1ea;
+    --foreground: #1a1a1a;
+    --card: #ffffff;
+    --card-foreground: #1a1a1a;
+    --popover: #ffffff;
+    --popover-foreground: #1a1a1a;
+    --primary: #a12c2c;
+    --primary-foreground: #f4f1ea;
+    --secondary: #d4c5a9;
+    --secondary-foreground: #1a1a1a;
+    --muted: #e8e4d9;
+    --muted-foreground: #5c5852;
+    --accent: #a12c2c;
+    --accent-foreground: #f4f1ea;
+    --destructive: #7a1d1d;
+    --border: #1a1a1a;
+    --input: #1a1a1a;
+    --ring: #a12c2c;
+    --radius: 0px;
+}
+
+.dark {
+    --background: oklch(0.145 0 0);
+    --foreground: oklch(0.985 0 0);
+    --card: oklch(0.205 0 0);
+    --card-foreground: oklch(0.985 0 0);
+    --popover: oklch(0.205 0 0);
+    --popover-foreground: oklch(0.985 0 0);
+    --primary: oklch(0.922 0 0);
+    --primary-foreground: oklch(0.205 0 0);
+    --secondary: oklch(0.269 0 0);
+    --secondary-foreground: oklch(0.985 0 0);
+    --muted: oklch(0.269 0 0);
+    --muted-foreground: oklch(0.708 0 0);
+    --accent: oklch(0.269 0 0);
+    --accent-foreground: oklch(0.985 0 0);
+    --destructive: oklch(0.704 0.191 22.216);
+    --border: oklch(1 0 0 / 10%);
+    --input: oklch(1 0 0 / 15%);
+    --ring: oklch(0.556 0 0);
+    --chart-1: oklch(0.87 0 0);
+    --chart-2: oklch(0.556 0 0);
+    --chart-3: oklch(0.439 0 0);
+    --chart-4: oklch(0.371 0 0);
+    --chart-5: oklch(0.269 0 0);
+    --sidebar: oklch(0.205 0 0);
+    --sidebar-foreground: oklch(0.985 0 0);
+    --sidebar-primary: oklch(0.488 0.243 264.376);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+    --sidebar-accent: oklch(0.269 0.0 0);
+    --sidebar-accent-foreground: oklch(0.985 0 0);
+    --sidebar-border: oklch(1 0 0 / 10%);
+    --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-magpie-paper text-magpie-ink antialiased;
+    background-image: 
+      linear-gradient(to bottom, rgba(244, 241, 234, 0.8) 0%, rgba(244, 241, 234, 1) 100%),
+      url("https://www.transparenttextures.com/patterns/stardust.png");
+    background-attachment: fixed;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    position: relative;
+    overflow-x: hidden;
+  }
+  
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("https://www.transparenttextures.com/patterns/paper-fibers.png");
+    opacity: 0.1;
+    pointer-events: none;
+    z-index: 100;
+  }
+  html {
+    @apply font-sans;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif;
+  }
+}
+
+.magpie-card {
+  @apply bg-white border-2 border-magpie-ink shadow-[8px_8px_0px_0px_rgba(26,26,26,1)];
+  border-radius: 0px;
+}
+
+.magpie-button {
+  @apply bg-magpie-crimson text-magpie-paper hover:bg-magpie-ink transition-all active:translate-x-1 active:translate-y-1 shadow-[4px_4px_0px_0px_rgba(26,26,26,1)];
+  border-radius: 0px;
+}
+
+.magpie-input {
+  @apply bg-white border-2 border-magpie-ink focus:ring-0 focus:border-magpie-crimson;
+  border-radius: 0px;
+}
+
+.markdown-body {
+  @apply text-sm leading-relaxed text-slate-600;
+}
